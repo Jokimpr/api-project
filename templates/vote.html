@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vote - Online Voting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin-bottom: 10px;
+        }
+        
+        .logout {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .logout a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .candidates {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .candidate-card {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            transition: border-color 0.3s;
+        }
+        
+        .candidate-card:hover {
+            border-color: #667eea;
+        }
+        
+        .candidate-card input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        
+        .candidate-info h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        
+        .candidate-info p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .vote-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        
+        .vote-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .messages {
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🗳️ Cast Your Vote</h1>
+        <p>Welcome, {{ current_user.voter_id }}</p>
+        <div class="logout">
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="section">
+            <h2>Select Your Candidate</h2>
+            <form method="POST">
+                <div class="candidates">
+                    {% for candidate in candidates %}
+                    <label class="candidate-card">
+                        <input type="radio" name="candidate_id" value="{{ candidate.id }}" required>
+                        <div class="candidate-info">
+                            <h3>{{ candidate.name }}</h3>
+                            <p><strong>Position:</strong> {{ candidate.position }}</p>
+                            <p><strong>Department:</strong> {{ candidate.department }}</p>
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="vote-btn">Cast Vote</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
