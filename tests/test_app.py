@@ -9,18 +9,22 @@ from app.models import User, Admin, Candidate
 def app():
     """Create and configure a test app instance."""
     db_fd, db_path = tempfile.mkstemp()
+    os.close(db_fd)
 
-    app = create_app()
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
-    app.config['WTF_CSRF_ENABLED'] = False
+    app = create_app({
+        'TESTING': True,
+        'SQLALCHEMY_DATABASE_URI': f'sqlite:///{db_path}',
+        'WTF_CSRF_ENABLED': False,
+    })
 
     with app.app_context():
         db.create_all()
 
     yield app
 
-    os.close(db_fd)
+    with app.app_context():
+        db.session.remove()
+        db.engine.dispose()
     os.unlink(db_path)
 
 
@@ -114,8 +118,8 @@ class TestCandidateModel:
 class TestRoutes:
     def test_home_page(self, client):
         response = client.get('/')
-        assert response.status_code == 200
-        assert b'login' in response.data.lower()
+        assert response.status_code == 302
+        assert '/login' in response.headers['Location']
 
     def test_register_page(self, client):
         response = client.get('/register')

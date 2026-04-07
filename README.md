@@ -20,7 +20,7 @@ A clean, production-ready online voting application built with Flask, featuring 
 
 ```
 online-voting-api/
-├── app.py                 # Main Flask application
+├── run.py                 # Main Flask application
 ├── requirements.txt       # Python dependencies
 ├── voting_system.db       # SQLite database (auto-created)
 ├── README.md             # This file
@@ -63,7 +63,7 @@ online-voting-api/
 
 5. **Run the application**
    ```bash
-   python app.py
+   python run.py
    ```
 
 6. **Access the application**
@@ -152,7 +152,7 @@ Delete `voting_system.db` file to reset all data.
 
 ## Production Deployment
 
-1. Change default admin password in `app.py`
+1. Change default admin password in `run.py`
 2. Set `app.config['SECRET_KEY']` to a secure random string
 3. Consider using a production WSGI server (gunicorn)
 4. Use environment variables for sensitive data
@@ -294,7 +294,7 @@ Compared to the original version, this update includes:
 
 ## Environment Variables 🔐
 
-- `FLASK_APP`: Application entry point (default: app.py)
+- `FLASK_APP`: Application entry point (default: run.py)
 - `FLASK_ENV`: Environment mode (development/production)
 - `SECRET_KEY`: Secret key for session management (MUST BE CHANGED IN PRODUCTION)
 - `DATABASE_URL`: Database connection string (default: SQLite)
