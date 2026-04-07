@@ -50,6 +50,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+.coverage*
 debug_pytest.txt
 results_*.xlsx
 
